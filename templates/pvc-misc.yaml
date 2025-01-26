@@ -1,0 +1,18 @@
+{{- if .Values.persistence.misc.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "sshd.fullname" . }}-misc
+  labels:
+    app: {{ template "sshd.name" . }}
+    chart: {{ template "sshd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "{{ .Values.persistence.misc.size }}"
+  storageClassName: "{{ .Values.persistence.misc.storageClassName }}"
+{{- end }}
