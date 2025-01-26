@@ -44,12 +44,22 @@ spec:
           volumeMounts:
           - name: authorizedkeys
             readOnly: true
-            mountPath: "/authorized_keys"
+            mountPath: /authorized_keys
+          {{- if .Values.persistence.enabled }}
+          - name: server-keys
+            readOnly: false
+            mountPath: /etc/ssh/keys
+          {{- end }}
       volumes:
         - name: authorizedkeys
           secret:
             secretName: {{ template "sshd.name" . }}
             defaultMode: 256
+        {{- if .Values.persistence.enabled }}
+        - name: server-keys
+          persistentVolumeClaim:
+            claimName: {{ template "sshd.fullname" . }}
+        {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
