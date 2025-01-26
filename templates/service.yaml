@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "sshd.fullname" . }}
+  {{- if gt (len .Values.service.annotations) 0 }}
+  annotations:
+  {{- range $k, $v := .Values.service.annotations }}
+    {{ $k }}: {{ $v }}
+  {{- end }}
+  {{- end }}
+  labels:
+    app: {{ template "sshd.name" . }}
+    chart: {{ template "sshd.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: ssh
+      protocol: TCP
+      name: ssh
+  selector:
+    app: {{ template "sshd.name" . }}
+    release: {{ .Release.Name }}
