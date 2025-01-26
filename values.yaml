@@ -15,9 +15,14 @@ service:
   port: 22
 
 persistence:
-  enabled: false
-  size: 1Mi
-  storageClassName: ""
+  serverKeys:
+    enabled: false
+    size: 1Mi
+    storageClassName: ""
+  misc:
+    enabled: false
+    size: 1Gi
+    storageClassName: ""
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
